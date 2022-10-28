@@ -21,7 +21,7 @@ function ShowModunsPage() {
       <h2>Describe</h2>
       <p>{modun.describe}</p>
       <h2>Content</h2>
-      {<div className="ck-contentDocDoc" dangerouslySetInnerHTML={{ __html: modun.content }} />}
+      {<div className="ck-content" dangerouslySetInnerHTML={{ __html: modun.content }} />}
     </div>
   ) : (
     ""

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -7,24 +7,33 @@ import { updateLanguage } from "../action";
 function UpdateLanguageModulePage() {
   const dispatch = useDispatch();
   const { id } = useParams();
+  const [state, setState] = useState({ isLoading: true });
   const language = useSelector((state) =>
     // eslint-disable-next-line eqeqeq
     state.language.languages.find((language) => language._id == id)
   );
-  console.log(language);
   // eslint-disable-next-line no-unused-vars
-  const [inputs, setInputs] = useState({ name: language.name, describe: language.describe });
+  const [inputs, setInputs] = useState({});
+
+  useEffect(() => {
+    if (language) {
+      setState({ isLoading: false });
+      setInputs({ name: language.name, describe: language.describe });
+    }
+  }, [language]);
 
   const handleChange = (e) => {
     setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
-
   // eslint-disable-next-line no-unused-vars
   const handleSubmit = (e) => {
     e.preventDefault();
     updateLanguage(dispatch, id, inputs);
   };
 
+  if (state.isLoading) {
+    return "";
+  }
   return (
     <Form onSubmit={handleSubmit}>
       <Form.Group className="mb-3" controlId="formBasicEmail">

@@ -32,6 +32,16 @@ function CreateModunPage() {
     setInputs((prev) => ({ ...prev, content: editor.getData() }));
   };
 
+  const selectLanguageOptions = languages.map((language) => (
+    <option value={language._id}>{language.name}</option>
+  ));
+
+  const inputTagSelected = inputs.tags.map((tag, index) => (
+    <Badge onClick={() => removeTagsByIndex(index)} bg="secondary">
+      {tag.name} x
+    </Badge>
+  ));
+
   return (
     <Form onSubmit={handleSubmit}>
       <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -44,9 +54,7 @@ function CreateModunPage() {
         <Form.Label>Language</Form.Label>
         <Form.Select name="language" onChange={handleChange} aria-label="Default select example">
           <option>Open this select menu</option>
-          {languages.map((language) => (
-            <option value={language._id}>{language.name}</option>
-          ))}
+          {selectLanguageOptions}
         </Form.Select>
         <Form.Text className="text-muted">We'll never share your email with anyone else.</Form.Text>
       </Form.Group>
@@ -69,20 +77,7 @@ function CreateModunPage() {
 
       <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label>Tags</Form.Label>
-        <div className="w-100 border rounded mb-2 p-2">
-          {inputs.tags.map((tag, index) => {
-            return (
-              <Badge
-                onClick={() => {
-                  removeTagsByIndex(index);
-                }}
-                bg="secondary"
-              >
-                {tag.name} x
-              </Badge>
-            );
-          })}
-        </div>
+        <div className="w-100 border rounded mb-2 p-2">{inputTagSelected}</div>
         <Row>
           <Col>
             <Form.Control

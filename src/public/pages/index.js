@@ -53,7 +53,7 @@ function IndexPage() {
   return (
     <ListGroup>
       {findModunsByTags().map((obj) => (
-        <ListGroup.Item style={{ border: "none" }}>
+        <ListGroup.Item key={obj._id} style={{ border: "none" }}>
           <Card style={{ width: "100%" }}>
             <Card.Body>
               <Card.Title>

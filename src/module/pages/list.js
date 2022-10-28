@@ -18,6 +18,29 @@ function ListModunPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const modunsTableItems = moduns.map((modun) => (
+    <tr>
+      <td>{modun._id}</td>
+      <td>{modun.name}</td>
+      <td>{modun.describe}</td>
+      <td>{modun.language === undefined ? "undefined" : modun.language.name}</td>
+      <td>{modun.createAt}</td>
+      <td>
+        <Link to={`/admin/modun/edit/${modun._id}`}>Edit</Link>
+      </td>
+      <td>
+        <Button
+          onClick={(e) => {
+            handleDelete(modun._id);
+          }}
+          variant="link"
+        >
+          Delete
+        </Button>
+      </td>
+    </tr>
+  ));
+
   return (
     <Table striped bordered hover size="sm">
       <thead>
@@ -30,33 +53,7 @@ function ListModunPage() {
           <th colSpan={2}>Action</th>
         </tr>
       </thead>
-      <tbody>
-        {moduns.map((modun) => {
-          return (
-            <tr>
-              <td>{modun._id}</td>
-              <td>{modun.name}</td>
-              <td>{modun.describe}</td>
-              {console.log(modun.language)}
-              <td>{modun.language === undefined ? "undefined" : modun.language.name}</td>
-              <td>{modun.createAt}</td>
-              <td>
-                <Link to={`/admin/modun/edit/${modun._id}`}>Edit</Link>
-              </td>
-              <td>
-                <Button
-                  onClick={(e) => {
-                    handleDelete(modun._id);
-                  }}
-                  variant="link"
-                >
-                  Delete
-                </Button>
-              </td>
-            </tr>
-          );
-        })}
-      </tbody>
+      <tbody>{modunsTableItems}</tbody>
     </Table>
   );
 }

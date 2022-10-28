@@ -1,4 +1,4 @@
-import { Badge, Button, Col, Container, Form, ListGroup, Row } from "react-bootstrap";
+import { Badge, Col, Container, Form, ListGroup, Row } from "react-bootstrap";
 import { Link, Outlet } from "react-router-dom";
 import {} from "react-bootstrap";
 import { useEffect, useState } from "react";
@@ -16,6 +16,7 @@ function PublicLayout() {
   useEffect(() => {
     getTags(dispatch);
     getLanguages(dispatch);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const filterTags = () => {
@@ -34,6 +35,34 @@ function PublicLayout() {
     setSearchOptions({ tags: searchOptions.tags.filter((obj) => obj._id !== id) });
   };
 
+  const tagElements = filterTags().map((val, index) => (
+    <Badge
+      style={{ margin: "0 2px" }}
+      onClick={() => addTagToSearchOptions(val._id)}
+      bg="secondary"
+    >
+      {val.name} x
+    </Badge>
+  ));
+
+  const languageListItems = languages.map((language) => (
+    <ListGroup.Item key={language._id} style={{ border: "none" }}>
+      <Link to={`/${language._id}`}>{language.name}</Link>
+    </ListGroup.Item>
+  ));
+
+  const tagSearchElements = searchOptions.tags.map((val, index) => (
+    <Badge
+      style={{ margin: "0 2px" }}
+      bg="secondary"
+      onClick={() => {
+        removeTagFromSearchOptions(val._id);
+      }}
+    >
+      {val.name} x
+    </Badge>
+  ));
+
   return (
     <Container>
       <Row className="w-100">
@@ -41,33 +70,17 @@ function PublicLayout() {
           <h3>Languages</h3>
           <hr />
           <ListGroup>
-            <ListGroup.Item style={{ border: "none" }}>
+            <ListGroup.Item key={"all"} style={{ border: "none" }}>
               <Link to={"/"}>All language</Link>
             </ListGroup.Item>
-            {languages.map((language) => (
-              <ListGroup.Item style={{ border: "none" }}>
-                <Link to={`/${language._id}`}>{language.name}</Link>
-              </ListGroup.Item>
-            ))}
+            {languageListItems}
           </ListGroup>
 
           <br />
           <h3>Tags</h3>
           <hr />
           <p>Finds:</p>
-          <div className="w-100 border rounded mb-2 p-2">
-            {searchOptions.tags.map((val, index) => (
-              <Badge
-                style={{ margin: "0 2px" }}
-                bg="secondary"
-                onClick={() => {
-                  removeTagFromSearchOptions(val._id);
-                }}
-              >
-                {val.name} x
-              </Badge>
-            ))}
-          </div>
+          <div className="w-100 border rounded mb-2 p-2">{tagSearchElements}</div>
           <p>Search input:</p>
           <div>
             <Form.Control
@@ -80,21 +93,7 @@ function PublicLayout() {
             />
           </div>
           <p>Search results:</p>
-          <div className="w-100 border rounded mb-2 p-2 ">
-            {filterTags().map((val, index) => {
-              return (
-                <Badge
-                  style={{ margin: "0 2px" }}
-                  onClick={() => {
-                    addTagToSearchOptions(val._id);
-                  }}
-                  bg="secondary"
-                >
-                  {val.name} x
-                </Badge>
-              );
-            })}
-          </div>
+          <div className="w-100 border rounded mb-2 p-2 ">{tagElements}</div>
         </Col>
         <Col>
           <Outlet context={[searchOptions, setSearchOptions]} />
